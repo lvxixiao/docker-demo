@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'com.palantir.docker' version '0.19.2'
+    id 'org.springframework.boot' version '2.0.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.5.RELEASE'
+}
+
+group = 'lvxixiao'
+version = '0.0.1'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+ext {
+    dockerRegistry = 'registry.cn-hangzhou.aliyuncs.com'
+    dockerNamespace = 'lvxixiao'
+}
+
+docker {
+    name = "$dockerRegistry/$dockerNamespace/$rootProject.name:$version"
+    copySpec.from(bootJar.archivePath)
+            .rename(bootJar.archiveName, 'app.jar')
+}
